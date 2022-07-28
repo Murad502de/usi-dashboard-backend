@@ -107,7 +107,7 @@ class SipuniCall extends Model
   }
   public static function getMissedInCallsData($userLabel = null, $userTag = null)
   {
-    if (!$userLabel || !$userTag) return null;
+    if (!$userLabel && !$userTag) return null;
 
     $missedCalls = self::query()
       ->where('tip', 'Входящий')
