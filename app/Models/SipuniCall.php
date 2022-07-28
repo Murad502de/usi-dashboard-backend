@@ -50,7 +50,7 @@ class SipuniCall extends Model
       ->get()
       ->toArray();
 
-    dd($receivedCalls);
+    // dd($receivedCalls);
 
     // dlitelnost_razgovora
 
