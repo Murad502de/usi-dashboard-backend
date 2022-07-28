@@ -50,10 +50,6 @@ class SipuniCall extends Model
       ->get()
       ->toArray();
 
-    // dd($receivedCalls);
-
-    // dlitelnost_razgovora
-
     $duration = 0;
 
     for ($i = 0; $i < count($receivedCalls) - 1; $i++) {
@@ -62,6 +58,27 @@ class SipuniCall extends Model
 
     return [
       'count' => count($receivedCalls),
+      'duration' => $duration,
+    ];
+  }
+  public static function getMissedCallsData($userNumber = null) {
+    if (!$userNumber) return null;
+
+    $missedCalls = self::query()
+      ->where('tip', 'Исходящий')
+      ->where('status', 'Не отвечен')
+      ->where('otkuda', $userNumber)
+      ->get()
+      ->toArray();
+
+    $duration = 0;
+
+    for ($i = 0; $i < count($missedCalls) - 1; $i++) {
+      $duration += (int)$missedCalls[$i]['dlitelnost_zvonka'];
+    }
+
+    return [
+      'count' => count($missedCalls),
       'duration' => $duration,
     ];
   }
