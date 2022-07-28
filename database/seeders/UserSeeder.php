@@ -256,9 +256,8 @@ class UserSeeder extends Seeder
       ],
     ];
 
-    foreach ( $users as $user )
-    {
-      DB::table( 'users' )->insert( $user );
+    foreach ($users as $user) {
+      DB::table('users')->insert($user);
     }
   }
 }

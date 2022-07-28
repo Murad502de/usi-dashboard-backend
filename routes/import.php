@@ -17,10 +17,7 @@ use App\Http\Controllers\Import\Sipuni\SipuniImportController;
 */
 
 Route::group(
-  [
-    'prefix' => 'sipuni',
-  ],
-
+  ['prefix' => 'sipuni',],
   function () {
     Route::get('/calls', SipuniImportController::class);
   }

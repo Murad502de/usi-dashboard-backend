@@ -39,4 +39,17 @@ class SipuniCall extends Model
   // {
   //   return $this->belongsTo( User::class, 'kto_otvetil', 'number' );
   // }
+
+  public static function getReceivedCallsData($userNumber = null) {
+    if (!$userNumber) return null;
+
+    $receivedCalls = self::query()
+      ->where('tip', 'Исходящий')
+      ->where('status', 'Отвечен')
+      ->where('otkuda', $userNumber)
+      ->get()
+      ->toArray();
+
+    dd($receivedCalls);
+  }
 }

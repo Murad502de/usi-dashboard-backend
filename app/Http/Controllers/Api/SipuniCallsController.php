@@ -17,12 +17,11 @@ class SipuniCallsController extends Controller
     $this->users = User::all();
   }
 
-  public function users ()
+  public function users()
   {
     $calls = [];
 
-    foreach ( $this->users as $user )
-    {
+    foreach ($this->users as $user) {
       // echo "user number: " . ( int )$user->number . '<br>'; // DELETE
 
       // $incomingReceivedCalls = SipuniCall::query()
@@ -46,18 +45,18 @@ class SipuniCallsController extends Controller
         'outgoing' => [
           'received' => count(
             SipuniCall::query()
-              ->where( 'tip', 'Исходящий' )
-              ->where( 'status', 'Отвечен' )
-              ->where( 'otkuda', $user->number )
+              ->where('tip', 'Исходящий')
+              ->where('status', 'Отвечен')
+              ->where('otkuda', $user->number)
               ->get()
               ->toArray()
           ),
 
           'missed' => count(
             SipuniCall::query()
-              ->where( 'tip', 'Исходящий' )
-              ->where( 'status', 'Не отвечен' )
-              ->where( 'otkuda', $user->number )
+              ->where('tip', 'Исходящий')
+              ->where('status', 'Не отвечен')
+              ->where('otkuda', $user->number)
               ->get()
               ->toArray()
           ),
@@ -66,27 +65,24 @@ class SipuniCallsController extends Controller
         'incoming' => [
           'received' => count(
             SipuniCall::query()
-              ->where( 'tip', 'Входящий' )
-              ->where( 'kto_razgovarival', 'LIKE', '%' . $user[ 'number' ] . '%' )
+              ->where('tip', 'Входящий')
+              ->where('kto_razgovarival', 'LIKE', '%' . $user['number'] . '%')
               ->get()
               ->toArray()
           ),
 
           'missed' => count(
             SipuniCall::query()
-              ->where( 'tip', 'Входящий' )
-              ->where( 'status', 'Не отвечен' )
+              ->where('tip', 'Входящий')
+              ->where('status', 'Не отвечен')
               ->where(
-                function ( $query ) use ( $user )
-                {
-                  if ( $user->label )
-                  {
-                    $query->where( 'metka', 'LIKE', '%' . $user->label . '%' );
+                function ($query) use ($user) {
+                  if ($user->label) {
+                    $query->where('metka', 'LIKE', '%' . $user->label . '%');
                   }
 
-                  if ( $user->tag )
-                  {
-                    $query->where( 'tegi', 'LIKE', '%' . $user->tag . '%' );
+                  if ($user->tag) {
+                    $query->where('tegi', 'LIKE', '%' . $user->tag . '%');
                   }
                 }
               )
@@ -97,20 +93,20 @@ class SipuniCallsController extends Controller
       ];
     }
 
-    return response( [ 'status' => 'OK', 'data' => $calls ], 200 );
+    return response(['status' => 'OK', 'data' => $calls], 200);
   }
 
-  public function usersCalls ()
+  public function usersCalls()
   {
     return 'usersCalls';
   }
 
-  public function usersId ( $id )
+  public function usersId($id)
   {
     return 'usersId: ' . $id;
   }
 
-  public function usersIdCalls ( $id )
+  public function usersIdCalls($id)
   {
     return 'usersIdCalls: ' . $id;
   }
