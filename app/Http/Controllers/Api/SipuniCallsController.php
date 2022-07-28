@@ -45,25 +45,8 @@ class SipuniCallsController extends Controller
         'user' => $user->toArray(),
 
         'outgoing' => [
-          // 'received' => count(
-          //   SipuniCall::query()
-          //     ->where('tip', 'Исходящий')
-          //     ->where('status', 'Отвечен')
-          //     ->where('otkuda', $user->number)
-          //     ->get()
-          //     ->toArray()
-          // ),
-
           'received' => SipuniCall::getReceivedCallsData($user->number),
-
-          'missed' => count(
-            SipuniCall::query()
-              ->where('tip', 'Исходящий')
-              ->where('status', 'Не отвечен')
-              ->where('otkuda', $user->number)
-              ->get()
-              ->toArray()
-          ),
+          'missed' => SipuniCall::getMissedCallsData($user->number),
         ],
 
         'incoming' => [
