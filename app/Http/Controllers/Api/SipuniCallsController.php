@@ -39,60 +39,62 @@ class SipuniCallsController extends Controller
       //   echo '</pre>';
       // }
 
-      SipuniCall::getReceivedCallsData($user->number);
+      // SipuniCall::getReceivedCallsData($user->number);
 
-      // $calls[] = [
-      //   'user' => $user->toArray(),
+      $calls[] = [
+        'user' => $user->toArray(),
 
-      //   'outgoing' => [
-      //     'received' => count(
-      //       SipuniCall::query()
-      //         ->where('tip', 'Исходящий')
-      //         ->where('status', 'Отвечен')
-      //         ->where('otkuda', $user->number)
-      //         ->get()
-      //         ->toArray()
-      //     ),
+        'outgoing' => [
+          // 'received' => count(
+          //   SipuniCall::query()
+          //     ->where('tip', 'Исходящий')
+          //     ->where('status', 'Отвечен')
+          //     ->where('otkuda', $user->number)
+          //     ->get()
+          //     ->toArray()
+          // ),
 
-      //     'missed' => count(
-      //       SipuniCall::query()
-      //         ->where('tip', 'Исходящий')
-      //         ->where('status', 'Не отвечен')
-      //         ->where('otkuda', $user->number)
-      //         ->get()
-      //         ->toArray()
-      //     ),
-      //   ],
+          'received' => SipuniCall::getReceivedCallsData($user->number),
 
-      //   'incoming' => [
-      //     'received' => count(
-      //       SipuniCall::query()
-      //         ->where('tip', 'Входящий')
-      //         ->where('kto_razgovarival', 'LIKE', '%' . $user['number'] . '%')
-      //         ->get()
-      //         ->toArray()
-      //     ),
+          'missed' => count(
+            SipuniCall::query()
+              ->where('tip', 'Исходящий')
+              ->where('status', 'Не отвечен')
+              ->where('otkuda', $user->number)
+              ->get()
+              ->toArray()
+          ),
+        ],
 
-      //     'missed' => count(
-      //       SipuniCall::query()
-      //         ->where('tip', 'Входящий')
-      //         ->where('status', 'Не отвечен')
-      //         ->where(
-      //           function ($query) use ($user) {
-      //             if ($user->label) {
-      //               $query->where('metka', 'LIKE', '%' . $user->label . '%');
-      //             }
+        'incoming' => [
+          'received' => count(
+            SipuniCall::query()
+              ->where('tip', 'Входящий')
+              ->where('kto_razgovarival', 'LIKE', '%' . $user['number'] . '%')
+              ->get()
+              ->toArray()
+          ),
 
-      //             if ($user->tag) {
-      //               $query->where('tegi', 'LIKE', '%' . $user->tag . '%');
-      //             }
-      //           }
-      //         )
-      //         ->get()
-      //         ->toArray()
-      //     ),
-      //   ],
-      // ];
+          'missed' => count(
+            SipuniCall::query()
+              ->where('tip', 'Входящий')
+              ->where('status', 'Не отвечен')
+              ->where(
+                function ($query) use ($user) {
+                  if ($user->label) {
+                    $query->where('metka', 'LIKE', '%' . $user->label . '%');
+                  }
+
+                  if ($user->tag) {
+                    $query->where('tegi', 'LIKE', '%' . $user->tag . '%');
+                  }
+                }
+              )
+              ->get()
+              ->toArray()
+          ),
+        ],
+      ];
     }
 
     return response(['status' => 'OK', 'data' => $calls], 200);

@@ -51,5 +51,18 @@ class SipuniCall extends Model
       ->toArray();
 
     dd($receivedCalls);
+
+    // dlitelnost_razgovora
+
+    $duration = 0;
+
+    for ($i = 0; $i < count($receivedCalls) - 1; $i++) {
+      $duration += (int)$receivedCalls[$i]['dlitelnost_razgovora'];
+    }
+
+    return [
+      'count' => count($receivedCalls),
+      'duration' => $duration,
+    ];
   }
 }
