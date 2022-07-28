@@ -40,7 +40,8 @@ class SipuniCall extends Model
   //   return $this->belongsTo( User::class, 'kto_otvetil', 'number' );
   // }
 
-  public static function getReceivedCallsData($userNumber = null) {
+  public static function getReceivedOutCallsData($userNumber = null)
+  {
     if (!$userNumber) return null;
 
     $receivedCalls = self::query()
@@ -61,13 +62,66 @@ class SipuniCall extends Model
       'duration' => $duration,
     ];
   }
-  public static function getMissedCallsData($userNumber = null) {
+  public static function getMissedOutCallsData($userNumber = null)
+  {
     if (!$userNumber) return null;
 
     $missedCalls = self::query()
       ->where('tip', 'Исходящий')
       ->where('status', 'Не отвечен')
       ->where('otkuda', $userNumber)
+      ->get()
+      ->toArray();
+
+    $duration = 0;
+
+    for ($i = 0; $i < count($missedCalls) - 1; $i++) {
+      $duration += (int)$missedCalls[$i]['dlitelnost_zvonka'];
+    }
+
+    return [
+      'count' => count($missedCalls),
+      'duration' => $duration,
+    ];
+  }
+  public static function getReceivedInCallsData($userNumber = null)
+  {
+    if (!$userNumber) return null;
+
+    $receivedCalls = self::query()
+      ->where('tip', 'Входящий')
+      ->where('kto_razgovarival', 'LIKE', '%' . $userNumber . '%')
+      ->get()
+      ->toArray();
+
+    $duration = 0;
+
+    for ($i = 0; $i < count($receivedCalls) - 1; $i++) {
+      $duration += (int)$receivedCalls[$i]['dlitelnost_razgovora'];
+    }
+
+    return [
+      'count' => count($receivedCalls),
+      'duration' => $duration,
+    ];
+  }
+  public static function getMissedInCallsData($userLabel = null, $userTag = null)
+  {
+    if (!$userLabel || !$userTag) return null;
+
+    $missedCalls = self::query()
+      ->where('tip', 'Входящий')
+      ->where('status', 'Не отвечен')
+      ->where(
+        function ($query) use ($userLabel, $userTag) {
+          if ($userLabel) {
+            $query->where('metka', 'LIKE', '%' . $userLabel . '%');
+          }
+          if ($userTag) {
+            $query->where('tegi', 'LIKE', '%' . $userTag . '%');
+          }
+        }
+      )
       ->get()
       ->toArray();
 

@@ -22,60 +22,15 @@ class SipuniCallsController extends Controller
     $calls = [];
 
     foreach ($this->users as $user) {
-      // echo "user number: " . ( int )$user->number . '<br>'; // DELETE
-
-      // $incomingReceivedCalls = SipuniCall::query()
-      //   ->where( 'tip', 'Исходящий' )
-      //   ->where( 'status', 'Отвечен' )
-      //   ->where( 'otkuda', $user->number )
-      //   ->get();
-
-      // echo "count: " . count( $incomingReceivedCalls->toArray() ) . '<br><br>'; // DELETE
-
-      // foreach ( $incomingReceivedCalls as $call )
-      // {
-      //   echo '<pre>';
-      //   print_r( $call->toArray() );
-      //   echo '</pre>';
-      // }
-
-      // SipuniCall::getReceivedCallsData($user->number);
-
       $calls[] = [
         'user' => $user->toArray(),
-
         'outgoing' => [
-          'received' => SipuniCall::getReceivedCallsData($user->number),
-          'missed' => SipuniCall::getMissedCallsData($user->number),
+          'received' => SipuniCall::getReceivedOutCallsData($user->number),
+          'missed' => SipuniCall::getMissedOutCallsData($user->number),
         ],
-
         'incoming' => [
-          'received' => count(
-            SipuniCall::query()
-              ->where('tip', 'Входящий')
-              ->where('kto_razgovarival', 'LIKE', '%' . $user['number'] . '%')
-              ->get()
-              ->toArray()
-          ),
-
-          'missed' => count(
-            SipuniCall::query()
-              ->where('tip', 'Входящий')
-              ->where('status', 'Не отвечен')
-              ->where(
-                function ($query) use ($user) {
-                  if ($user->label) {
-                    $query->where('metka', 'LIKE', '%' . $user->label . '%');
-                  }
-
-                  if ($user->tag) {
-                    $query->where('tegi', 'LIKE', '%' . $user->tag . '%');
-                  }
-                }
-              )
-              ->get()
-              ->toArray()
-          ),
+          'received' => SipuniCall::getReceivedInCallsData($user->number),
+          'missed' => SipuniCall::getMissedInCallsData($user->label, $user->tag),
         ],
       ];
     }
