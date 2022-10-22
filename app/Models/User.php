@@ -26,6 +26,7 @@ class User extends Authenticatable
         'name',
         'number',
         'department',
+        'position',
         'ats',
         'tag',
         'label',
