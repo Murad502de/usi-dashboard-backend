@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Import\Sipuni\SipuniImportController;
+use App\Http\Controllers\SipuniImportUsersController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +13,9 @@ use App\Http\Controllers\Import\Sipuni\SipuniImportController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
-Route::group(
-  ['prefix' => 'sipuni',],
-  function () {
+Route::prefix('sipuni')->group(function () {
     Route::get('/calls', SipuniImportController::class);
-  }
-);
+    Route::get('/users', SipuniImportUsersController::class);
+});
