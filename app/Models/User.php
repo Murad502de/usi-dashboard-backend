@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public static function getDepartment(string $value): string
     {
-        echo "<br>"; echo mb_strtolower($value); echo "<br>";
+        // echo "<br>"; echo mb_strtolower($value); echo "<br>";
 
         switch (mb_strtolower($value)) {
             case self::KRD:

@@ -15,9 +15,9 @@ class SipuniCallsImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            echo '<pre>';
-            print_r($row->toArray());
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($row->toArray());
+            // echo '</pre>';
 
             SipuniCall::create(array_merge($row->toArray(), [
                 'kto_razgovarival' => join(

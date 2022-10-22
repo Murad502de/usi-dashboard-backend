@@ -17,13 +17,13 @@ class SipuniUsersImport implements ToCollection, WithHeadingRow
         User::truncate();
 
         foreach ($rows as $row) {
-            echo '<pre>';
-            print_r($row->toArray());
-            echo '</pre><br>';
+            // echo '<pre>';
+            // print_r($row->toArray());
+            // echo '</pre><br>';
 
             $explodedName = explode(' ', $row['name']);
 
-            echo '<pre>'; print_r($explodedName); echo '</pre><br>';
+            // echo '<pre>'; print_r($explodedName); echo '</pre><br>';
 
             User::create(array_merge($row->toArray(), [
                 'number' => $row['login'],
